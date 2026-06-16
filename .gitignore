@@ -1,0 +1,32 @@
+node_modules/
+.next/
+out/
+dist/
+.sst/
+.open-next/
+*.log
+.env
+.env.local
+.env.*.local
+.DS_Store
+.vscode/
+.idea/
+sst-env.d.ts
+
+# ポートフォリオ元資料 (スライド/PDF) はコミットしない
+*.pdf
+*.pptx
+*.ppt
+*.key
+
+# 検証用スクショ等、ルート直下のpng (public/配下の画像は対象外)
+/*.png
+
+# Playwright MCP の出力
+.playwright-mcp/
+
+# TypeScript build cache
+*.tsbuildinfo
+
+# 内部の開発/AWS運用メモ (公開しない)
+CLAUDE.md
