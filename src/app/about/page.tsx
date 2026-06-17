@@ -117,7 +117,7 @@ export default function AboutPage() {
             スキル
           </h2>
           <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="rounded-xl border border-neutral-800 bg-neutral-900/40 p-5 sm:col-span-2">
+            <SpotlightCard className="p-5 sm:col-span-2">
               <p className="text-xs font-semibold uppercase tracking-wider text-emerald-300">
                 Languages
               </p>
@@ -126,7 +126,7 @@ export default function AboutPage() {
                   <Pill key={s}>{s}</Pill>
                 ))}
               </div>
-            </div>
+            </SpotlightCard>
             {skillGroups.map((g) => (
               <SpotlightCard key={g.key} className="p-5">
                 <p className="text-xs font-semibold uppercase tracking-wider text-emerald-300">
