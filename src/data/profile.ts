@@ -17,7 +17,7 @@ export const profile = {
   facts: [
     { label: "出身地", value: "長野県" },
     { label: "大学", value: "同志社大学 生命医科学部" },
-    { label: "大学院", value: "同志社大学大学院 (2026/4〜)" },
+    { label: "大学院", value: "同志社大学大学院 生命医科学研究科 医工学・医情報学専攻 (2026/4〜)" },
     { label: "研究室", value: "ティッシュエンジニアリング研究室" },
     { label: "GitHub", value: "NakamuraRyotaro" },
   ],
@@ -58,7 +58,7 @@ export const profile = {
     },
     {
       date: "2026/04",
-      title: "同志社大学大学院 入学",
+      title: "同志社大学大学院 生命医科学研究科 入学",
       detail:
         "精神科問診支援アプリ、リアルタイム文字起こし・診療録自動生成アプリの開発に継続して従事。",
     },

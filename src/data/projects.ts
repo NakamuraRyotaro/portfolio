@@ -137,12 +137,6 @@ export const projects: Project[] = [
       { src: "/work/medpal/slides/dup-send.png", alt: "直面した課題①: アンケートの重複送信を EventBridge + Lambda で再設計" },
       { src: "/work/medpal/slides/retention.png", alt: "直面した課題②: 1ヶ月継続利用率を3割→7割へ改善" },
     ],
-    testimonials: [
-      { role: "医師", quote: "短い診察時間でも患者さんの症状を細かく把握できた" },
-      { role: "医師", quote: "記載されている情報を元に、診療時に深ぼることができた" },
-      { role: "患者", quote: "診療時に伝えきれなかった内容も含めて伝えることができた" },
-      { role: "患者", quote: "自分の症状に対しての理解も深めることができた" },
-    ],
     architecture:
       "認証認可は AWS Cognito、外部連携は LINE Messaging API / Claude API。API は App Runner、定期アンケート送信は Lambda + EventBridge。App Runner / Lambda は VPC 内から RDS にアクセスし、外向き通信は NAT Gateway 経由。",
     links: [],

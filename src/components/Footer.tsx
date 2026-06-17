@@ -8,7 +8,7 @@ export default function Footer() {
         <div>
           <p className="text-sm font-semibold text-neutral-200">{profile.name}</p>
           <p className="mt-1 text-xs text-neutral-500">
-            © 2026 {profile.nameEn} ・ AI × Healthcare Engineer
+            © 2026 {profile.nameEn}
           </p>
         </div>
         <div className="flex items-center gap-5 text-sm text-neutral-400">
