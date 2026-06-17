@@ -108,14 +108,14 @@ npx sst secret set ContactToEmail   "<your-notify-email>"   --stage prod
 npm run sst:remove
 ```
 
-## 技術的なこだわり (面接トーク用)
+## 設計上の工夫
 
-- **Amplify と OpenNext の比較**: 業務では Amplify を使うが、抽象の中身を理解するため本サイトでは
-  CloudFront + Lambda + S3 の各プリミティブに分解し、IaC (SST / Pulumi) でデプロイしている。
+- **マネージドの抽象を分解して扱う**: マネージドなホスティングではなく、CloudFront + Lambda + S3 の
+  各プリミティブに分解し、IaC (SST / Pulumi) で構成。インフラの責務を明示的に管理している。
 - **AWS で完結する構成**: お問い合わせは Server Action → SES + DynamoDB で完結。外部 SaaS に依存しない。
-- **メール到達性まで作り込む**: 送信元ドメインを DKIM 署名し、Gmail に確実に届くようにした
-  (一度 `From=gmail` でスパム判定された経験から、自ドメイン + DKIM へ移行)。
-- **CI/CD は OIDC で**: アクセスキーを GitHub に置かず、OIDC で一時クレデンシャルを取得して `sst deploy`。
+- **メール到達性の作り込み**: 送信元ドメインを DKIM 署名し、SPF/DKIM/DMARC を成立させて Gmail への到達性を確保。
+- **OIDC ベースの CI/CD**: アクセスキーを GitHub に保存せず、OIDC で一時クレデンシャルを取得して `sst deploy`。
+- **静的化の徹底**: プロジェクト詳細は `generateStaticParams` で SSG。動的処理はフォームの Server Action のみに限定し、コールドスタートの影響を抑えている。
 
 ## ライセンス
 
