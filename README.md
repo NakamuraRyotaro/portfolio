@@ -1,96 +1,106 @@
 # Portfolio — Ryotaro Nakamura
 
-Next.js (App Router) + MUI v6 + SST(OpenNext) で構築したポートフォリオサイト。
+AI × ヘルスケアを中心に開発している中村遼太郎のポートフォリオサイト。
+Next.js (App Router) + SST(OpenNext) で AWS 上に構築し、独自ドメイン・HTTPS・CI/CD まで自前で運用しています。
 
-> 業務ではAWS Amplifyによる素早いデプロイが多いため、本ポートフォリオは敢えて `OpenNext + SST` で AWS プリミティブ (CloudFront / Lambda / DynamoDB / SES) を直接扱う構成にしています。
+🌐 **Live: https://ryotaro-nakamura.com**
+
+> 業務では AWS Amplify による素早いデプロイが多いため、本ポートフォリオは敢えて `OpenNext + SST` で
+> CloudFront / Lambda / S3 / DynamoDB / SES / Route 53 / ACM といった AWS プリミティブを直接扱う構成にしています。
 
 ## 技術スタック
 
-- **Frontend / SSR**: Next.js 15 (App Router) / React 19 / TypeScript
-- **UI**: MUI v6 (`@mui/material`) + AppRouterCacheProvider
-- **Form**: React Server Actions + zod
-- **Backend (Contact)**: AWS SES (送信) + DynamoDB (履歴保存)
-- **Infra (IaC)**: SST v3 + OpenNext (CloudFront + Lambda + S3)
+| レイヤー | 技術 |
+|---|---|
+| Frontend / SSR | Next.js 15 (App Router) / React 19 / TypeScript |
+| UI | Tailwind CSS v3 + motion (framer-motion)。Aceternity UI 風のダークデザインを自作 (`src/components/ui/`)。点描グローブは `cobe` |
+| Form / Validation | React Server Actions + zod |
+| Backend (Contact) | AWS SES (自ドメイン DKIM 署名で送信) + DynamoDB (履歴保存) |
+| Infra (IaC) | SST v3 + OpenNext → CloudFront + Lambda + S3 |
+| DNS / 証明書 | Route 53 (独自ドメイン) + ACM (TLS) |
+| CI/CD | GitHub Actions (OIDC) → `sst deploy` 自動デプロイ |
+
+## 見どころ
+
+- **独自ドメイン + HTTPS**: Route 53 で取得したドメインを ACM 証明書付きで CloudFront に紐付け。
+- **お問い合わせフォーム**: Server Action → SES 送信 + DynamoDB 保存で完結し、外部 SaaS 依存なし。
+  送信元はドメインを **Easy DKIM 署名** することで、Gmail 等への到達性 (SPF/DKIM/DMARC) を確保。
+- **静的化の徹底**: プロジェクト詳細は `generateStaticParams` で SSG。動的処理はフォームの Server Action のみ。
+- **インタラクティブ UI**: ドラッグで回せる点描グローブ (cobe) や、スクロール連動アニメーション (motion)。
+- **push したら本番反映**: main への push で GitHub Actions が OIDC で AWS ロールを引き受け、`sst deploy` を自動実行。
 
 ## ディレクトリ構成
 
 ```
 src/
 ├── app/
-│   ├── layout.tsx          # 共通レイアウト + テーマ
-│   ├── page.tsx            # トップページ
-│   ├── about/page.tsx      # 自己紹介
+│   ├── layout.tsx           # 共通レイアウト + メタ情報
+│   ├── icon.svg             # ファビコン (RN ロゴ)
+│   ├── page.tsx             # トップ (ヒーロー + 主要プロジェクト + スタック)
+│   ├── about/page.tsx       # 自己紹介・経歴・スキル
 │   ├── projects/
-│   │   ├── page.tsx        # プロジェクト一覧
-│   │   └── [slug]/page.tsx # プロジェクト詳細 (SSG)
+│   │   ├── page.tsx         # プロジェクト一覧
+│   │   └── [slug]/page.tsx  # プロジェクト詳細 (SSG)
 │   └── contact/
-│       ├── page.tsx        # お問い合わせ
-│       └── actions.ts      # Server Action (SES + DynamoDB)
-├── components/             # Header / Footer / ProjectCard / ContactForm
-├── data/                   # projects.ts / profile.ts (コンテンツ)
-├── lib/contact.ts          # zod スキーマ
-└── theme/theme.ts          # MUIテーマ
-sst.config.ts               # SST/OpenNext デプロイ定義
+│       ├── page.tsx         # お問い合わせ
+│       └── actions.ts       # Server Action (SES + DynamoDB)
+├── components/              # Header / Footer / ProjectCard / ContactForm
+│   └── ui/                  # 自作の Aceternity 風コンポーネント群
+├── data/                    # projects.ts / profile.ts (サイトのコンテンツ)
+└── lib/                     # contact.ts (zod スキーマ) / utils.ts (cn)
+sst.config.ts                # SST / OpenNext のインフラ定義
+.github/workflows/deploy.yml # CI/CD (OIDC → sst deploy)
 ```
+
+サイトのコンテンツ (プロフィール・実績) は `src/data/profile.ts` と `src/data/projects.ts` に集約しています。
 
 ## ローカル開発
 
 ```bash
 npm install
-npm run dev
-# → http://localhost:3000
+npm run dev          # → http://localhost:3000
 ```
 
-ビルド確認:
+検証:
 
 ```bash
-npm run build
-npm run typecheck
+npm run build        # 本番ビルド
+npm run typecheck    # tsc --noEmit
 ```
 
-## コンテンツの書き換えポイント
+## デプロイ
 
-ドラフトのため、以下の TODO を埋めてください。
+### CI/CD (推奨)
 
-- `src/data/profile.ts`
-  - `links.github` / `links.x` / `links.linkedin` のURL
-  - `summary` の自己紹介文
-- `src/data/projects.ts`
-  - 各プロジェクトの `summary` / `responsibilities` / `achievements`
-  - 数値 (X件、X%、Xms など) を実データに差し替え
-  - 公開できるなら `links` に GitHub / Demo URL を追加
-
-## デプロイ (SST + OpenNext on AWS)
-
-### 前提
-
-- AWS CLI が `~/.aws/credentials` で設定済み (Amplifyで使ってるアカウントでOK)
-- 送信元/送信先のメールアドレス (またはドメイン) を **SES で verify 済み**
-  - SESサンドボックス中はTo側もverify必須
-- リージョン: `ap-northeast-1` (sst.config.ts で設定)
-
-### 初回セットアップ
+`main` ブランチへ push すると、GitHub Actions が OIDC で AWS ロールを引き受けて自動デプロイします。
 
 ```bash
-# SSTのプラットフォームコードを取得 (.sst/ ができる)
-npx sst install
-
-# SES送信元/送信先を Secret に登録
-npx sst secret set ContactFromEmail "noreply@yourdomain.example" --stage prod
-npx sst secret set ContactToEmail   "ryotaro.nakamura@evem-japan.com" --stage prod
+git push origin main   # → typecheck → sst deploy (prod)
 ```
 
-### デプロイ
+事前に AWS 側で以下が必要です:
+- GitHub OIDC プロバイダ (`token.actions.githubusercontent.com`)
+- デプロイ用 IAM ロール (信頼ポリシーを当該リポジトリ/ブランチにスコープ)
+
+### 手動デプロイ
 
 ```bash
-# 開発用: ローカルのNext.jsを動かしつつ、SSTでLambda/SES等を立ち上げる
+# 開発用: ローカル Next.js を動かしつつ SST で Lambda/SES 等を起動
 npm run sst:dev
 
 # 本番デプロイ
 npm run sst:deploy
 ```
 
-成功すると CloudFront のURLが出力されます。独自ドメインを使う場合は `sst.config.ts` の `domain` ブロック (TODO コメントあり) を有効化してください。
+### Secrets (お問い合わせメール)
+
+```bash
+npx sst secret set ContactFromEmail "noreply@<your-domain>" --stage prod
+npx sst secret set ContactToEmail   "<your-notify-email>"   --stage prod
+```
+
+> 送信元 (`ContactFromEmail`) は **自分が DNS を管理するドメイン**にし、SES でドメイン認証 + DKIM を設定すること。
+> `@gmail.com` などを送信元にすると SPF/DKIM/DMARC が成立せず、受信側でスパム扱いになります。
 
 ### 削除
 
@@ -98,11 +108,14 @@ npm run sst:deploy
 npm run sst:remove
 ```
 
-## アピールポイント (面接でのトーク用)
+## 技術的なこだわり (面接トーク用)
 
-- **Amplify と OpenNext の比較**: 業務では Amplify を使っているが、抽象の中身を理解したくて、本サイトでは CloudFront + Lambda + S3 の各プリミティブに分解して IaC (SST/Pulumi) でデプロイしている。
-- **AWS統一の構成**: お問い合わせフォームは Server Action → SES + DynamoDB で完結し、外部SaaS依存を持たない。
-- **静的化の徹底**: プロジェクト詳細ページは `generateStaticParams` で SSG、フォームのみ Server Action で動的処理。Lambda コールドスタート影響を最小化。
+- **Amplify と OpenNext の比較**: 業務では Amplify を使うが、抽象の中身を理解するため本サイトでは
+  CloudFront + Lambda + S3 の各プリミティブに分解し、IaC (SST / Pulumi) でデプロイしている。
+- **AWS で完結する構成**: お問い合わせは Server Action → SES + DynamoDB で完結。外部 SaaS に依存しない。
+- **メール到達性まで作り込む**: 送信元ドメインを DKIM 署名し、Gmail に確実に届くようにした
+  (一度 `From=gmail` でスパム判定された経験から、自ドメイン + DKIM へ移行)。
+- **CI/CD は OIDC で**: アクセスキーを GitHub に置かず、OIDC で一時クレデンシャルを取得して `sst deploy`。
 
 ## ライセンス
 
