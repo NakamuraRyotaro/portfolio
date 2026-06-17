@@ -3,6 +3,7 @@ import { Inter, Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { profile } from "@/data/profile";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,11 +20,11 @@ const notoJp = Noto_Sans_JP({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ryotaro-nakamura.com"),
-  title: "Ryotaro Nakamura — AI × Healthcare Engineer",
+  title: `${profile.nameEn} — ${profile.role}`,
   description:
-    "中村 遼太郎のポートフォリオ。AI × ヘルスケアを中心に、フロントエンドからAWSインフラまで横断し、実際に使われるプロダクトづくりを学んでいる学生エンジニア。",
+    "中村 遼太郎のポートフォリオ。フロントエンドからAWSインフラ、AIまで横断し、実際に使われるプロダクトづくりを学んでいる学生エンジニア。",
   openGraph: {
-    title: "Ryotaro Nakamura — AI × Healthcare Engineer",
+    title: `${profile.nameEn} — ${profile.role}`,
     description:
       "AI × ヘルスケアを中心に、フロントからインフラまで横断してプロダクトを作る新卒エンジニアのポートフォリオ。",
     type: "website",

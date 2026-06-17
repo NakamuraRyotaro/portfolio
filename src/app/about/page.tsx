@@ -53,7 +53,7 @@ export default function AboutPage() {
             </div>
 
             <p className="mt-8 max-w-2xl text-base leading-relaxed text-neutral-400">
-              {profile.positioning}
+              {profile.aboutLead}
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">

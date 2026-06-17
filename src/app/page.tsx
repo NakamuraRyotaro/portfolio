@@ -55,7 +55,7 @@ export default function Home() {
           </h1>
 
           <div className="mt-6 max-w-2xl text-lg text-neutral-400">
-            <TextGenerateEffect words="Product Engineer" />
+            <TextGenerateEffect words={profile.role} />
           </div>
 
           <div className="mt-5 flex max-w-2xl items-center gap-4">

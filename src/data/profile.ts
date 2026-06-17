@@ -1,13 +1,22 @@
+// 肩書きはここ1箇所だけで定義する（サイト全体で profile.role / profile.title を参照）
+const ROLE = "AI Application Engineer";
+
 export const profile = {
   name: "中村 遼太郎",
   nameEn: "Ryotaro Nakamura",
-  title: "AI Application Engineer（2028卒 / 同志社大学院）",
+  /** 肩書き（短）。ヒーロー・メタ等で使う唯一のソース */
+  role: ROLE,
+  /** 肩書き（長）。about ページ用 */
+  title: `${ROLE}（2028卒 / 同志社大学院）`,
   tagline:
     "AI × ヘルスケアを中心に、フロントエンドからインフラまで横断してプロダクトを開発しています。",
   email: "nakamura.ryotaro1121@gmail.com",
-  // T字型ポジショニング（採用者目線エージェントの助言）
+  // T字型ポジショニング（ヒーロー用・短め）
   positioning:
-    "バックエンド / AWSインフラを軸に、フロント・AIまで横断。研究室とインターンで、実際に使われるプロダクトづくりを実践しながら学んでいます。",
+    "バックエンド / AWSインフラを軸に、フロント・AIまで横断。研究室とインターンで、実際に使われるプロダクトを作っています。",
+  // About冒頭リード（ヒーローと差別化した、踏み込んだ自己紹介）
+  aboutLead:
+    "医療 × AI を軸に、フロントエンド・バックエンド・AWSインフラまでを一人で横断して開発しています。研究室では精神科領域のAIアプリを実運用まで、インターンでは複数の新規プロダクトやPoCを担当。技術選定から運用・改善までを通して、「作って終わり」にしないプロダクトづくりを大事にしています。",
   links: {
     github: "https://github.com/NakamuraRyotaro",
     x: "",
@@ -17,8 +26,8 @@ export const profile = {
   facts: [
     { label: "出身地", value: "長野県" },
     { label: "大学", value: "同志社大学 生命医科学部" },
-    { label: "大学院", value: "同志社大学大学院 生命医科学研究科 医工学・医情報学専攻 (2026/4〜)" },
-    { label: "研究室", value: "ティッシュエンジニアリング研究室" },
+    { label: "大学院", value: "同志社大学院 生命医科学研究科 (2026/4〜)" },
+    { label: "研究室", value: "ティッシュエンジニアリング研究室（AIアプリ開発に従事）" },
     { label: "GitHub", value: "NakamuraRyotaro" },
   ],
   summary: [
@@ -58,7 +67,7 @@ export const profile = {
     },
     {
       date: "2026/04",
-      title: "同志社大学大学院 生命医科学研究科 入学",
+      title: "同志社大学院 生命医科学研究科 入学",
       detail:
         "精神科問診支援アプリ、リアルタイム文字起こし・診療録自動生成アプリの開発に継続して従事。",
     },
